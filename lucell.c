@@ -3,7 +3,7 @@
 #include <unistd.h>
 
 int checkIfFileExists(char path[]);
-int lexer(char path[]);
+char **lexer(char path[]);
 
 int main(int argc, char *argv[]){
 	if(argc == 1){
@@ -39,3 +39,6 @@ int checkIfFileExists(char path[]){
 	return exists;
 }
 
+char **lexer(char path[]){
+
+}
