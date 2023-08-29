@@ -1,6 +1,8 @@
+#include <stddef.h>
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+#include <stdlib.h>
 
 int checkIfFileExists(char path[]);
 char **lexer(char path[]);
@@ -39,6 +41,48 @@ int checkIfFileExists(char path[]){
 	return exists;
 }
 
-char **lexer(char path[]){
 
+char** readLine(char* path, int* line){
+	FILE* fi = fopen(path, "r");
+	int count = 0;
+	char c;
+	while((c = fgetc(fi)) != EOF){
+		if(c == "\n"){
+			count++;
+		}
+	}
+	//back to top of File
+	rewind(fi);
+
+	char** lines = (char**)malloc(count * sizeof(char*));
+	if(lines == NULL){
+		fclose(fi);
+		return NULL;
+	}
+
+	//s_t = special type to store size of an object
+	size_t bSize = 2048;
+	char* buffer = (char*)malloc(bSize*sizeof(char));
+	if(buffer == NULL){
+		fclose(fi);
+		free(lines);
+		return NULL;
+	}
+
+	int lineNumber = 0;
+	//replace \n with \0
+	while(fgets(buffer, bSize, fi) != NULL){
+		buffer[strcspn(buffer, "\n")] = "\0";
+		lines[lineNumber] = strdup(buffer);
+		lineNumber++;
+	*lineNumber = count;
+	fclose(fi);
+	free(buffer);
+
+
+
+}
+
+char **lexer(char path[]){
+	//read
 }
