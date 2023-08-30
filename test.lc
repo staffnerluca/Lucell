@@ -1,0 +1,5 @@
+//I am a comment ignore me
+
+p "Das ist ein Test"
+
+if 1 == 1 p "Wahr" else p "falsch"

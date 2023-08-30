@@ -6,6 +6,7 @@
 
 int checkIfFileExists(char path[]);
 char **lexer(char path[]);
+char** readLine(char* path, int line);
 
 int main(int argc, char *argv[]){
 	if(argc == 1){
@@ -17,16 +18,17 @@ int main(int argc, char *argv[]){
 	if(checkIfFileExists(path) == 0){
 		return 1;
 	}
-	lexer(path);
-
+	//lexer(path);
+	readLine(path, 1);
 }
+
 
 int checkIfFileExists(char path[]){
 	int exists = access(path, F_OK);
 	
 	int len = strlen(path);
 	if(len >= 4){
-		if(!path[len - 1] == "c" || !path[len - 2] == "l"){
+		if(!path[len - 1] == 'c' || !path[len - 2] == 'l'){
 			printf("Wrong file format. It need to end with .lc");
 			return 0;
 		}
@@ -42,12 +44,12 @@ int checkIfFileExists(char path[]){
 }
 
 
-char** readLine(char* path, int* line){
+char** readLine(char* path, int line){
 	FILE* fi = fopen(path, "r");
 	int count = 0;
 	char c;
 	while((c = fgetc(fi)) != EOF){
-		if(c == "\n"){
+		if(c == '\n'){
 			count++;
 		}
 	}
@@ -70,19 +72,17 @@ char** readLine(char* path, int* line){
 	}
 
 	int lineNumber = 0;
-	//replace \n with \0
-	while(fgets(buffer, bSize, fi) != NULL){
-		buffer[strcspn(buffer, "\n")] = "\0";
-		lines[lineNumber] = strdup(buffer);
-		lineNumber++;
-	*lineNumber = count;
-	fclose(fi);
-	free(buffer);
+	//replace \n with \0//replace '\n' with '\0'
+	while (fgets(buffer, bSize, fi) != NULL) {
+    		size_t len = strlen(buffer);
+    		if (len > 0 && buffer[len - 1] == '\n') {
+        	buffer[len - 1] = '\0'; // Replace '\n' with '\0'
+    	}
+    	lines[lineNumber] = strdup(buffer);
+    	lineNumber++;
+	}
 
-
-
-}
-
-char **lexer(char path[]){
-	//read
+        fclose(fi);
+        free(buffer);
+        return lines;
 }
