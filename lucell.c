@@ -29,38 +29,38 @@ char* OneCharTokens = "("
 			"%"
 			"=";
 
-char* TwoCharTokens = "!="
+char* TwoCharTokens = "!= "
 			"=="
 			">="
 			"<=";
 
-char* KeyWords = "data"
-		"if" 
-		"then" 
-		"else" 
-		"case" 
-		"of" 
-		"where" 
-		"let" 
-		"in"
-    		"do" 
-		"module" 
-		"import" 
-		"qualified" 
-		"as"
-    		"class" 
-		"instance" 
-		"deriving" 
-		"type" 
-		"newtype"
-    		"default" 
-		"deriving" 
-		"family" 
-		"deriving" 
-		"instance" 
-		"deriving" 
-		"class" 
-		"deriving";
+char* KeyWords = "data "
+		"if "  
+		"then " 
+		"else " 
+		"case " 
+		"of " 
+		"where " 
+		"let " 
+		"in "
+    		"do " 
+		"module " 
+		"import " 
+		"qualified " 
+		"as "
+    		"class " 
+		"instance " 
+		"deriving " 
+		"type " 
+		"newtype "
+    		"default " 
+		"deriving " 
+		"family " 
+		"deriving " 
+		"instance " 
+		"deriving " 
+		"class " 
+		"deriving ";
 
 int main(int argc, char *argv[]){
 	if(argc == 1){
@@ -98,20 +98,46 @@ int checkIfFileExists(char path[]){
 	return exists;
 }
 
+void createToken(){
+	
+}
 
+
+//need to check for case =
 node* createTokensFromFile(char path[]){
     FILE* file = fopen("example.txt", "r");
-
+    int singleToken = 0;
+    char* previousChars = "";
     if (file == NULL) {
         perror("Failed to open the file");
     }
     //fget retrns a int not a char!!!
     int c;
     while ((c = fgetc(file)) != EOF) {
-        // 'c' contains the character read from the file
-        // You can process or print it as needed
 	char ch = (char)c;
+	while(*OneCharTokens){
+		if(*OneCharTokens == ch){
+			createToken(ch);
+			singleToken = 1;
+		}
+		if(singleToken == 0){
+			char* temp = (char*)malloc(strlen(previousChars)+1);
+			strcpy(temp, previousChars);
+			strcat(temp, *c);
+			strcpy(previousChars, temp);
+			
+			char kWCopy[strlen(KeyWords+1)];
+			strcpy(kWCopy, KeyWords);
 
+			char* t = strtok(kWCopy, " ");
+			while(t != NULL){
+				if(strcmp(t, previousChars) == 0){
+						createToken();
+				}
+		}
+		OneCharTokens++;
+	}
+	
         
     }
 
